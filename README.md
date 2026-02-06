@@ -30,9 +30,9 @@ Komplette CRM-Konfiguration für **Allianz Jaeger** (Versicherung, Immobilien, U
 | **Büro-Workflows** | Aufgaben → Schaden → offene Rechnung → Anträge → Mahnung | Bürovorgänge |
 | **Arbeitsanweisungen** | Agentur → KFZ → Privat Sach → Krankenvers. | Interne Anleitungen |
 
-## 👤 People Custom Fields
+## People Custom Fields
 
-Siehe [docs/people-fields.md](docs/people-fields.md) für alle 29 Custom Fields.
+Siehe [docs/people-fields.md](docs/people-fields.md) fuer alle 31 Custom Fields (inkl. Immobilienkategorie und Dokumentenordner).
 
 ## 🔄 Brevo ↔ Twenty Sync
 
@@ -70,10 +70,15 @@ Alles self-hosted auf **Unraid NAS** via Docker + Nginx Proxy Manager.
 
 ## 📝 Changelog
 
-- **2026-02-06**: Dokument-Sync Workflow dokumentiert + Docker Composes hinzugefügt
+- **2026-02-06**: Dokument-Sync WebDAV Fix: MKCOL-Methode korrigiert, 403-Fehler behoben
+- **2026-02-06**: Bereich-Routing implementiert (Versicherung/Immobilien/UnLOG/Hausverwaltung)
+- **2026-02-06**: Immobilienkategorie + Dokumentenordner Custom Fields hinzugefuegt (31 Felder)
+- **2026-02-06**: Kundenstatus Custom Field geloescht (Kundenart reicht)
+- **2026-02-06**: Duplicate Workflow "Twenty → NAS Dokumenten-Sync" geloescht
+- **2026-02-06**: Dokument-Sync Workflow dokumentiert + Docker Composes hinzugefuegt
 - **2026-02-05**: Twenty Dokument-Sync Workflow (n8n: `hLmDJBA0uOn2xB9w`)
-- **2026-02-05**: Docker Volume Mounts für Twenty Storage + NAS Beratungsordner
+- **2026-02-05**: Docker Volume Mounts fuer Twenty Storage + NAS Beratungsordner
 - **2026-02-04**: People Custom Fields erstellt (29 Felder)
-- **2026-02-04**: UnLOG Aufträge Pipeline + Brevo Webhook Integration
+- **2026-02-04**: UnLOG Auftraege Pipeline + Brevo Webhook Integration
 - **2026-02-04**: Twenty Custom Objects erstellt (5 Pipelines)
 - **2026-02-03**: Initiales Setup Twenty CRM

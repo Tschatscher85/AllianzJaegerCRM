@@ -1,18 +1,18 @@
 # n8n Workflows - Allianz Jaeger
 
-## Übersicht
+## Uebersicht
 
 | Workflow ID | Name | Trigger | Status |
 |------------|------|---------|--------|
-| `L0nt3WOb5Ew6CsUe` | UnLOG - Brevo - Meistertask - Google | Brevo Webhook | ✅ Aktiv |
-| `cxgFhItwoQ56troU` | Twenty Webhook Parser | Twenty Webhook | ✅ Aktiv |
-| `Ti7k7a5jC2l1Yd2z` | Twenty API Proxy | n8n Webhook | ✅ Aktiv |
-| `hLmDJBA0uOn2xB9w` | Twenty Dokument-Sync | Twenty Webhook (attachment) | ✅ Aktiv |
-| *(geplant)* | Versicherung Formular → Twenty | Brevo Webhook | ⏳ Offen |
-| *(geplant)* | SuperChat → Twenty (TKV-Leads) | SuperChat Webhook | ⏳ Offen |
-| *(geplant)* | Twenty → Brevo Listen Sync | Twenty Webhook | ⏳ Offen |
+| `L0nt3WOb5Ew6CsUe` | UnLOG - Brevo - Meistertask - Google | Brevo Webhook | Aktiv |
+| `cxgFhItwoQ56troU` | Twenty -> UnLOG Statusaenderung | Twenty Webhook | Aktiv |
+| `Ti7k7a5jC2l1Yd2z` | Twenty API Test (Proxy) | n8n Webhook | Aktiv |
+| `hLmDJBA0uOn2xB9w` | Twenty Dokument-Sync | Twenty Webhook (attachment) | Aktiv |
+| *(geplant)* | Versicherung Formular -> Twenty | Brevo Webhook | Offen |
+| *(geplant)* | SuperChat -> Twenty (TKV-Leads) | SuperChat Webhook | Offen |
+| *(geplant)* | Twenty -> Brevo Listen Sync | Twenty Webhook | Offen |
 
-## Workflow 1: UnLOG - Brevo → Twenty + Google + Chatwoot
+## Workflow 1: UnLOG - Brevo -> Twenty + Google + Chatwoot
 
 **ID:** `L0nt3WOb5Ew6CsUe`
 **Webhook:** `https://make.tschatscher.eu/webhook/unlog-brevo`
@@ -21,13 +21,13 @@
 
 ```
 Brevo Webhook (POST)
-  → Daten extrahieren (Vorname, Nachname, Email, WhatsApp, Auftrag, Preis, Ausgabe)
-  → Telefonnummer formatieren (E.164)
-  → Parallel:
-    ├── Google Contacts (erstellen/aktualisieren)
-    ├── Google Sheets (2026 Sheet, neue Zeile)
-    ├── Twenty CRM (UnLOG Auftrag erstellen, Stage: AUFTRAG)
-    └── Chatwoot (WhatsApp Template senden)
+  -> Daten extrahieren (Vorname, Nachname, Email, WhatsApp, Auftrag, Preis, Ausgabe)
+  -> Telefonnummer formatieren (E.164)
+  -> Parallel:
+    +-- Google Contacts (erstellen/aktualisieren)
+    +-- Google Sheets (2026 Sheet, neue Zeile)
+    +-- Twenty CRM (UnLOG Auftrag erstellen, Stage: AUFTRAG)
+    +-- Chatwoot (WhatsApp Template senden)
 ```
 
 ### Twenty API Call
@@ -45,16 +45,16 @@ POST https://twenty.tschatscher.eu/rest/unlogAuftraege
 }
 ```
 
-## Workflow 2: Twenty Webhook Parser
+## Workflow 2: Twenty -> UnLOG Statusaenderung
 
 **ID:** `cxgFhItwoQ56troU`
 
 Parsed Twenty Webhook Events und verteilt sie an die richtigen Aktionen.
 
-### Unterstützte Events
+### Unterstuetzte Events
 
 - `*.created` - Neues Objekt erstellt
-- `*.updated` - Objekt geändert
+- `*.updated` - Objekt geaendert
 
 ### Datenextraktion
 
@@ -67,15 +67,15 @@ const eventName = body.eventName; // z.B. "unlogAuftrag.created"
 // Felder auslesen
 const name = record.name;
 const stage = record.stage;
-const einnahmen = record.einnahmen?.amountMicros / 1000000; // → EUR
+const einnahmen = record.einnahmen?.amountMicros / 1000000; // -> EUR
 ```
 
-## Workflow 3: Twenty API Proxy
+## Workflow 3: Twenty API Test (Proxy)
 
 **ID:** `Ti7k7a5jC2l1Yd2z`
 **Webhook:** `https://make.tschatscher.eu/webhook/twenty-proxy`
 
-Proxy für Twenty Metadata API (Field Creation etc.) über n8n.
+Proxy fuer Twenty Metadata API (Field Creation etc.) ueber n8n.
 
 ### Verwendung
 
@@ -83,12 +83,9 @@ Proxy für Twenty Metadata API (Field Creation etc.) über n8n.
 POST /webhook/twenty-proxy
 {
   "method": "POST",
-  "path": "/rest/metadata/fields",
+  "path": "/metadata",
   "body": {
-    "objectMetadataId": "...",
-    "name": "feldname",
-    "label": "Feld Label",
-    "type": "TEXT"
+    "query": "mutation { createOneField(...) { id name } }"
   }
 }
 ```
@@ -98,7 +95,7 @@ POST /webhook/twenty-proxy
 **ID:** `hLmDJBA0uOn2xB9w`
 **Webhook:** `https://make.tschatscher.eu/webhook/twenty-attachment`
 
-Automatischer Dokument-Sync von Twenty CRM auf den NAS Kundenordner.
+Automatischer Dokument-Sync von Twenty CRM auf den NAS Kundenordner via WebDAV.
 
 Siehe [docs/dokument-sync.md](dokument-sync.md) fuer die komplette Dokumentation.
 
@@ -106,16 +103,23 @@ Siehe [docs/dokument-sync.md](dokument-sync.md) fuer die komplette Dokumentation
 
 ```
 Twenty Webhook (attachment.created)
-  → Parse & Route (nur .created Events)
-  → Person oder Immobilie? (IF)
-    ├── Person → Get Person → Build Path → /data/beratung/Versicherungen/{Nachname} {Vorname}/
-    └── Immobilie → Get Immobilie → Build Path → /data/beratung/Immobilienmakler/Verkauf/{Adresse}/
-  → Read Source File (aus Twenty Storage)
-  → Write to NAS (in Kundenordner)
-  → Update Twenty (Dokumentenordner-Link setzen)
+  -> Parse & Route (nur .created Events)
+  -> Person oder Immobilie? (IF)
+    +-- Person -> Get Person -> Build Path (Bereich-Routing)
+    |   VERSICHERUNG -> /Beratung/Versicherungen/{Name}/
+    |   IMMOBILIEN   -> /Beratung/Immobilienmakler/{Verkauf|Vermietung}/{Name}/
+    |   UNLOG        -> /UnLog/Auftraege/{Jahr}/{Name}/
+    |   HAUSVERWALTUNG -> /Beratung/Hausverwaltung/{Name}/
+    |   (kein Bereich -> STOP, kein Upload)
+    +-- Immobilie -> Get Immobilie -> Build Path -> /Beratung/Immobilienmakler/Verkauf/{Adresse}/
+  -> Create Parent Folder (WebDAV MKCOL)
+  -> Create Folder (WebDAV MKCOL)
+  -> Read Source File (aus Twenty Storage)
+  -> Upload to NAS (WebDAV PUT)
+  -> Update Twenty (Dokumentenordner-Link setzen)
 ```
 
-## Geplant: Versicherung Formular → Twenty
+## Geplant: Versicherung Formular -> Twenty
 
 ### Brevo Formular Felder
 
@@ -128,25 +132,25 @@ Dropdowns: KUNDENART, EVBVORGANG, GEKUENDIGT, SCHADENSART, SERVICEART
 
 ```
 Brevo Webhook (Versicherung Formular)
-  → Daten extrahieren
-  → Telefonnummer formatieren (E.164)
-  → Datum konvertieren (DD-MM-YYYY → YYYY-MM-DD)
-  → SELECT Werte mappen (Brevo → Twenty)
-  → Twenty: Person erstellen/aktualisieren
-  → Twenty: Bereich = ["VERSICHERUNG"] setzen
-  → Google Contacts aktualisieren
+  -> Daten extrahieren
+  -> Telefonnummer formatieren (E.164)
+  -> Datum konvertieren (DD-MM-YYYY -> YYYY-MM-DD)
+  -> SELECT Werte mappen (Brevo -> Twenty)
+  -> Twenty: Person erstellen/aktualisieren
+  -> Twenty: Bereich = ["VERSICHERUNG"] setzen
+  -> Google Contacts aktualisieren
 ```
 
-## Geplant: Twenty → Brevo Listen Sync
+## Geplant: Twenty -> Brevo Listen Sync
 
 ### Flow
 
 ```
 Twenty Webhook (Person updated)
-  → Geänderte Felder erkennen
-  → Brevo API: Kontakt erstellen/aktualisieren
-  → Brevo API: In richtige Liste(n) verschieben
-  → Brevo Automation läuft los (Mail + WhatsApp)
+  -> Geaenderte Felder erkennen
+  -> Brevo API: Kontakt erstellen/aktualisieren
+  -> Brevo API: In richtige Liste(n) verschieben
+  -> Brevo Automation laeuft los (Mail + WhatsApp)
 ```
 
 ### Mapping Logic (JavaScript)
@@ -188,3 +192,4 @@ const fieldToList = {
 | Brevo | API Key | v3 API |
 | Chatwoot | API Token | Account 1 |
 | Google | OAuth2 | Sheets + Contacts |
+| WebDAV (NAS) | Basic Auth | httpBasicAuth in n8n |

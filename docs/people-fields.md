@@ -2,7 +2,7 @@
 
 ## Übersicht
 
-29 Custom Fields auf dem People-Objekt, die alle Brevo-Kontaktfelder abbilden.
+31 Custom Fields auf dem People-Objekt, die alle Brevo-Kontaktfelder abbilden plus Dokument-Sync Felder.
 
 **Object Metadata ID:** `f16bc624-35b3-4299-adc6-58f9613700bf`
 
@@ -63,12 +63,19 @@
 
 ## Immobilien
 
-| # | Feld | API Name | Typ | Beschreibung |
-|---|------|----------|-----|-------------|
+| # | Feld | API Name | Typ | Beschreibung / Optionen |
+|---|------|----------|-----|------------------------|
 | 26 | Immobilientyp | `immobilientyp` | TEXT | Art der Immobilie |
 | 27 | ImmoScout Anschrift | `immoscoutAnschrift` | TEXT | Adresse aus ImmoScout |
-| 28 | Immobilienwert | `immobilienwert` | TEXT | Geschätzter Wert |
+| 28 | Immobilienwert | `immobilienwert` | TEXT | Geschaetzter Wert |
 | 29 | ImmoScout ID | `immoscoutId` | TEXT | ImmoScout Objekt-ID |
+| 30 | Immobilienkategorie | `immobilienkategorie` | SELECT | `VERKAUF` (orange), `VERMIETUNG` (tuerkis) |
+
+## Dokumentenordner
+
+| # | Feld | API Name | Typ | Beschreibung |
+|---|------|----------|-----|-------------|
+| 31 | Dokumentenordner | `dokumentenordner` | LINK | Automatisch gesetzt durch Dokument-Sync Workflow. Label = Windows-Pfad, URL = WebDAV-Link |
 
 ## Field IDs (für API-Zugriff)
 
@@ -102,7 +109,8 @@
   "immobilientyp": "89986619-ff2d-42ea-9e11-9726979a4f2c",
   "immoscoutAnschrift": "1af02bd5-883e-43b9-8df1-16e32a4424d3",
   "immobilienwert": "afe92e3f-bf91-417e-85e6-85451dd2d3a3",
-  "immoscoutId": "95ea79e2-4684-42a6-b095-f3a107269ff6"
+  "immoscoutId": "95ea79e2-4684-42a6-b095-f3a107269ff6",
+  "immobilienkategorie": "b86ca957-d830-44e2-8966-9a7f60fb1c8f"
 }
 ```
 
