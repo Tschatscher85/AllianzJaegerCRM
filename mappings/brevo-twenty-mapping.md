@@ -18,7 +18,7 @@
 | SCHADENSART | `schadensart` | SELECT | Mapping-Tabelle unten |
 | SERVICEART | `serviceart` | SELECT | Mapping-Tabelle unten |
 | SONSTIGES | `sonstiges` | TEXT | Direkt |
-| LEAD | `lead` | TEXT | Direkt |
+| LEAD | `lead` | MULTI_SELECT | Array -> komma-separiert (Twenty -> Brevo) |
 | JAHRESKONTAKT | `jahreskontakt` | DATE | DD-MM-YYYY → YYYY-MM-DD |
 | TERMINDATUM | `terminDatum` | DATE | DD-MM-YYYY → YYYY-MM-DD |
 | TERMINART | `terminArt` | TEXT | Direkt |
@@ -36,7 +36,16 @@
 | IMMOSCOUTANSCHRIFT | `immoscoutAnschrift` | TEXT | Direkt |
 | IMMOBILIENWERT | `immobilienwert` | TEXT | Direkt |
 | IMMOSCOUTID | `immoscoutId` | TEXT | Direkt |
-| UNLOGAUFTRAG | → UnLOG Aufträge Object | - | Separates Object |
+| WOHNFLAECHE | `wohnflaeche` | TEXT | Direkt |
+| GRUNDSTUECKFLAECHE | `grundstueckflaeche` | TEXT | Direkt |
+| ZIMMERANZAHL | `zimmeranzahl` | TEXT | Direkt |
+| BAUJAHR | `baujahr` | TEXT | Direkt |
+| ORT | `ort` | TEXT | Direkt |
+| STRASSE | `strasse` | TEXT | Direkt |
+| ZAHNFEHLEN | `zahnfehlen` | TEXT | Direkt |
+| ZAHNLINK | `zahnlink` | LINK | URL aus LINK-Feld extrahieren |
+| WERBUNGFACEBOOK | `werbungFacebook` | TEXT | Direkt |
+| UNLOGAUFTRAG | → UnLOG Auftraege Object | - | Separates Object |
 | UNLOGPREIS | → UnLOG Aufträge Object | CURRENCY | * 1.000.000 (amountMicros) |
 | UNLOGAUSGABE | → UnLOG Aufträge Object | CURRENCY | * 1.000.000 (amountMicros) |
 
@@ -110,6 +119,19 @@
 |-----------|-------------|
 | Ja | `JA` |
 | Nein | `NEIN` |
+
+### Lead (MULTI_SELECT)
+| Brevo Wert | Twenty Value |
+|-----------|-------------|
+| TKVPferd | `TKVPFERD` |
+| TKVHund | `TKVHUND` |
+| TKVKatze | `TKVKATZE` |
+| Zahnversicherung | `ZAHNVERSICHERUNG` |
+| Immobilienanfrage | `IMMOBILIENANFRAGE` |
+| Eigentuemeranfrage | `EIGENTUEMERANFRAGE` |
+| Kinderkasko | `KINDERKASKO` |
+
+**Hinweis:** LEAD ist ein MULTI_SELECT (Mehrfachauswahl). Bei Twenty -> Brevo Sync wird das Array komma-separiert gesendet (z.B. `TKVHUND,ZAHNVERSICHERUNG`).
 
 ## Twenty Tags → Brevo Listen Mapping
 

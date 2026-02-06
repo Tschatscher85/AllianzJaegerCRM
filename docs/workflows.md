@@ -10,7 +10,7 @@
 | `hLmDJBA0uOn2xB9w` | Twenty Dokument-Sync | Twenty Webhook (attachment) | Aktiv |
 | *(geplant)* | Versicherung Formular -> Twenty | Brevo Webhook | Offen |
 | *(geplant)* | SuperChat -> Twenty (TKV-Leads) | SuperChat Webhook | Offen |
-| *(geplant)* | Twenty -> Brevo Listen Sync | Twenty Webhook | Offen |
+| `wJDcKGNAwfscBq51` | Twenty -> Brevo Kontakt Sync | Twenty Webhook (person) | Aktiv |
 
 ## Workflow 1: UnLOG - Brevo -> Twenty + Google + Chatwoot
 
@@ -141,48 +141,76 @@ Brevo Webhook (Versicherung Formular)
   -> Google Contacts aktualisieren
 ```
 
-## Geplant: Twenty -> Brevo Listen Sync
+## Workflow 5: Twenty -> Brevo Kontakt Sync
+
+**ID:** `wJDcKGNAwfscBq51`
+**Webhook:** `https://make.tschatscher.eu/webhook/twenty-person-sync`
+
+Bidirektionaler Sync: Wenn eine Person in Twenty erstellt/geaendert wird UND eine Kundenart gesetzt ist, werden alle 40 Felder an Brevo gepusht und die richtige(n) Liste(n) zugewiesen.
+
+### Voraussetzungen fuer Sync
+
+- Person muss eine **Email** haben (ohne Email kein Brevo-Kontakt)
+- Person muss eine **Kundenart** haben (ohne Kundenart kein Push)
 
 ### Flow
 
 ```
-Twenty Webhook (Person updated)
-  -> Geaenderte Felder erkennen
-  -> Brevo API: Kontakt erstellen/aktualisieren
-  -> Brevo API: In richtige Liste(n) verschieben
-  -> Brevo Automation laeuft los (Mail + WhatsApp)
+Twenty Webhook (person.created / person.updated)
+  -> Parse & Filter (Code Node)
+     - Nur person.* Events
+     - STOPP wenn keine Kundenart oder keine Email
+     - ALLE 40 Felder auslesen
+     - Telefon -> E.164 normalisieren fuer WHATSAPP
+     - Datum: YYYY-MM-DD -> DD-MM-YYYY konvertieren
+     - LEAD (MULTI_SELECT): Array -> komma-separiert
+     - Kundenart/evbVorgang/etc. -> Brevo Listen-IDs mappen
+     - Alte Listen berechnen (unlinkListIds)
+  -> Brevo API (POST /v3/contacts)
+     - updateEnabled: true (Upsert)
+     - listIds: neue Listen zuweisen
+     - unlinkListIds: alte Listen entfernen
+     - attributes: alle 40 Felder
 ```
 
-### Mapping Logic (JavaScript)
+### Listen-Mapping
 
 ```javascript
-const fieldToList = {
-  kundenart: {
-    NEU_BESTANDSKUNDE_DU: 15,
-    NEU_BESTANDSKUNDE_SIE: 16,
-    INTERESSENT: 48,
-    INTERESSENT_FIRMA: 21,
-    EIGENTUEMERANFRAGE: 19,
-    IMMOBILIENANFRAGE: 18
-  },
-  evbVorgang: { AUSGEGEBEN: 46, ERLEDIGT: 47 },
-  gekuendigt: { KFZ: 28, PRIVAT_SACH: 27 },
-  schadensart: {
-    AUTOSCHADEN: 29,
-    AUTOSCHADEN_WERKSTATT: 30,
-    GLASSCHADEN: 31,
-    GEBAEUDESCHADEN: 32,
-    HAFTPFLICHTSCHADEN: 33
-  },
-  serviceart: {
-    ANTRAG: 38,
-    RECHNUNG_ZAHN: 34,
-    RECHNUNG_TIERKRANKEN: 36,
-    RECHNUNG_VOLLKRANKEN: 35,
-    MAHNUNG: 37
-  }
+const kundenartToList = {
+  NEU_BESTANDSKUNDE_DU: 15, NEU_BESTANDSKUNDE_SIE: 16,
+  INTERESSENT: 48, INTERESSENT_FIRMA: 21,
+  EIGENTUEMERANFRAGE: 19, IMMOBILIENANFRAGE: 18
+};
+const evbVorgangToList = { AUSGEGEBEN: 46, ERLEDIGT: 47 };
+const gekuendigtToList = { KFZ: 28, PRIVAT_SACH: 27 };
+const schadensartToList = {
+  AUTOSCHADEN: 29, AUTOSCHADEN_WERKSTATT: 30,
+  GLASSCHADEN: 31, GEBAEUDESCHADEN: 32, HAFTPFLICHTSCHADEN: 33
+};
+const serviceartToList = {
+  ANTRAG: 38, RECHNUNG_ZAHN: 34,
+  RECHNUNG_TIERKRANKEN: 36, RECHNUNG_VOLLKRANKEN: 35, MAHNUNG: 37
 };
 ```
+
+### Synced Felder (40 Attribute)
+
+**Basis:** VORNAME, NACHNAME, WHATSAPP, GEBURTSDATUM, JAHRESKONTAKT, POSTLEITZAHL, ORT, STRASSE, BRIEFANREDE, SONSTIGES
+**Geschaeft:** KUNDENART, LEAD (Multi-Select)
+**Versicherung:** EVBNUMMER, EVBVORGANG, GEKUENDIGT, SCHADENSART, SERVICEART
+**Termin:** TERMINDATUM, TERMINART, TERMINUHRZEIT, TERMINORT
+**Immobilien:** IMMOBILIENTYP, IMMOSCOUTANSCHRIFT, IMMOBILIENWERT, IMMOSCOUTID, WOHNFLAECHE, GRUNDSTUECKFLAECHE, ZIMMERANZAHL, BAUJAHR
+**Tier:** TIERRASSE, TIERGESCHLECHT, KATZENHALTUNG, TIERKRANKENKRANKHEITEN, TIERKRANKENKASTRIERT, TIERGEBURTSDATUM
+**Zahn:** ZAHNALTER, NAMEKINDZAHN, ZAHNFEHLEN, ZAHNLINK
+**Marketing:** WERBUNGFACEBOOK
+
+### Twenty Webhook
+
+| Einstellung | Wert |
+|------------|------|
+| Webhook ID | `63357115-1dfd-46a3-a4f8-04d5acf2c6fb` |
+| Event | `*.*` (Code filtert auf `person.*`) |
+| Target URL | `https://make.tschatscher.eu/webhook/twenty-person-sync` |
 
 ## API Credentials
 

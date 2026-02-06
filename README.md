@@ -32,7 +32,7 @@ Komplette CRM-Konfiguration für **Allianz Jaeger** (Versicherung, Immobilien, U
 
 ## People Custom Fields
 
-Siehe [docs/people-fields.md](docs/people-fields.md) fuer alle 31 Custom Fields (inkl. Immobilienkategorie und Dokumentenordner).
+Siehe [docs/people-fields.md](docs/people-fields.md) fuer alle 40 Custom Fields (inkl. Immobilien, Zahn, Marketing und Dokumentenordner).
 
 ## 🔄 Brevo ↔ Twenty Sync
 
@@ -70,6 +70,10 @@ Alles self-hosted auf **Unraid NAS** via Docker + Nginx Proxy Manager.
 
 ## 📝 Changelog
 
+- **2026-02-06**: Twenty -> Brevo Kontakt Sync Workflow (`wJDcKGNAwfscBq51`) - alle 40 Felder + Listen-Sync
+- **2026-02-06**: 9 neue Custom Fields: Ort, Strasse, Wohnflaeche, Grundstueckflaeche, Zimmeranzahl, Baujahr, Zahnfehlen, Zahnlink, Werbung Facebook
+- **2026-02-06**: LEAD Feld von TEXT zu MULTI_SELECT geaendert (7 Optionen: TKV, Zahn, Immo, Kinderkasko)
+- **2026-02-06**: People Custom Fields von 31 auf 40 erweitert
 - **2026-02-06**: Dokument-Sync WebDAV Fix: MKCOL-Methode korrigiert, 403-Fehler behoben
 - **2026-02-06**: Bereich-Routing implementiert (Versicherung/Immobilien/UnLOG/Hausverwaltung)
 - **2026-02-06**: Immobilienkategorie + Dokumentenordner Custom Fields hinzugefuegt (31 Felder)
