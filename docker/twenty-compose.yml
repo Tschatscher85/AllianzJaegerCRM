@@ -10,15 +10,50 @@ services:
       - 3353:3000
     environment:
       NODE_PORT: 3000
-      PG_DATABASE_URL: postgres://twentyuser:${TWENTY_DB_PASSWORD}@twenty-db:5432/default
+      PG_DATABASE_URL: postgres://twentyuser:twentypass@twenty-db:5432/default
       SERVER_URL: https://twenty.tschatscher.eu
       APP_SECRET: ${TWENTY_APP_SECRET}
       REDIS_URL: redis://twenty-redis:6379
+      STORAGE_TYPE: local
+      TZ: Europe/Berlin
       DISABLE_DB_MIGRATIONS: "false"
       DISABLE_CRON_JOBS_REGISTRATION: "false"
       IS_MULTIWORKSPACE_ENABLED: "false"
-      STORAGE_TYPE: local
-      TZ: Europe/Berlin
+      # Multi-Workspace braucht Wildcard DNS (*.twenty.tschatscher.eu)
+      # Strato unterstuetzt keine Wildcard-Subdomains -> deaktiviert
+      # DEFAULT_SUBDOMAIN: app
+      # IS_CONFIG_VARIABLES_IN_DB_ENABLED: "true"
+      # === KI / AI Funktionen (Serverless + OpenAI) ===
+      SERVERLESS_TYPE: local
+      # SERVERLESS_LOGS_ENABLED: "true"
+      # OpenAI-kompatible KI (fuer Twenty AI Features wie Copilot)
+      OPENAI_COMPATIBLE_BASE_URL: https://api.openai.com/v1
+      OPENAI_COMPATIBLE_API_KEY: ${OPENAI_API_KEY}
+      OPENAI_COMPATIBLE_MODEL_NAMES: gpt-4o-mini,gpt-4o
+      # === Google Integration (Gmail + Calendar + SSO) ===
+      AUTH_GOOGLE_ENABLED: "true"
+      MESSAGING_PROVIDER_GMAIL_ENABLED: "true"
+      CALENDAR_PROVIDER_GOOGLE_ENABLED: "true"
+      AUTH_GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID}
+      AUTH_GOOGLE_CLIENT_SECRET: ${GOOGLE_CLIENT_SECRET}
+      AUTH_GOOGLE_CALLBACK_URL: https://twenty.tschatscher.eu/auth/google/redirect
+      AUTH_GOOGLE_APIS_CALLBACK_URL: https://twenty.tschatscher.eu/auth/google-apis/get-access-token
+      # === E-Mail (SMTP via Brevo) - auskommentiert, spaeter aktivierbar ===
+      # EMAIL_DRIVER: smtp
+      # EMAIL_SMTP_HOST: smtp.brevo.com
+      # EMAIL_SMTP_PORT: 587
+      # EMAIL_SMTP_USER: dein-brevo-smtp-user
+      # EMAIL_SMTP_PASSWORD: dein-brevo-smtp-password
+      # EMAIL_FROM_ADDRESS: noreply@tschatscher.eu
+      # EMAIL_FROM_NAME: Allianz Jaeger
+      # === Microsoft (Outlook) - auskommentiert ===
+      # AUTH_MICROSOFT_ENABLED: "false"
+      # MESSAGING_PROVIDER_MICROSOFT_ENABLED: "false"
+      # CALENDAR_PROVIDER_MICROSOFT_ENABLED: "false"
+      # AUTH_MICROSOFT_CLIENT_ID: deine-microsoft-client-id
+      # AUTH_MICROSOFT_CLIENT_SECRET: dein-microsoft-client-secret
+      # AUTH_MICROSOFT_CALLBACK_URL: https://twenty.tschatscher.eu/auth/microsoft/redirect
+      # AUTH_MICROSOFT_APIS_CALLBACK_URL: https://twenty.tschatscher.eu/auth/microsoft-apis/get-access-token
     depends_on:
       db:
         condition: service_healthy
@@ -41,14 +76,44 @@ services:
       - "/mnt/user/Backups/Twenty:/app/packages/twenty-server/.local-storage:rw"
     command: ["yarn", "worker:prod"]
     environment:
-      PG_DATABASE_URL: postgres://twentyuser:${TWENTY_DB_PASSWORD}@twenty-db:5432/default
+      PG_DATABASE_URL: postgres://twentyuser:twentypass@twenty-db:5432/default
       SERVER_URL: https://twenty.tschatscher.eu
       APP_SECRET: ${TWENTY_APP_SECRET}
       REDIS_URL: redis://twenty-redis:6379
-      DISABLE_DB_MIGRATIONS: "false"
-      DISABLE_CRON_JOBS_REGISTRATION: "false"
       STORAGE_TYPE: local
       TZ: Europe/Berlin
+      DISABLE_DB_MIGRATIONS: "true"
+      DISABLE_CRON_JOBS_REGISTRATION: "true"
+      IS_MULTIWORKSPACE_ENABLED: "false"
+      # === KI / AI Funktionen (Worker braucht die gleichen Keys) ===
+      SERVERLESS_TYPE: local
+      OPENAI_COMPATIBLE_BASE_URL: https://api.openai.com/v1
+      OPENAI_COMPATIBLE_API_KEY: ${OPENAI_API_KEY}
+      OPENAI_COMPATIBLE_MODEL_NAMES: gpt-4o-mini,gpt-4o
+      # === Google Integration (Worker sync Gmail + Calendar) ===
+      AUTH_GOOGLE_ENABLED: "true"
+      MESSAGING_PROVIDER_GMAIL_ENABLED: "true"
+      CALENDAR_PROVIDER_GOOGLE_ENABLED: "true"
+      AUTH_GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID}
+      AUTH_GOOGLE_CLIENT_SECRET: ${GOOGLE_CLIENT_SECRET}
+      AUTH_GOOGLE_CALLBACK_URL: https://twenty.tschatscher.eu/auth/google/redirect
+      AUTH_GOOGLE_APIS_CALLBACK_URL: https://twenty.tschatscher.eu/auth/google-apis/get-access-token
+      # === E-Mail (Worker verschickt Mails) ===
+      # EMAIL_DRIVER: smtp
+      # EMAIL_SMTP_HOST: smtp.brevo.com
+      # EMAIL_SMTP_PORT: 587
+      # EMAIL_SMTP_USER: dein-brevo-smtp-user
+      # EMAIL_SMTP_PASSWORD: dein-brevo-smtp-password
+      # EMAIL_FROM_ADDRESS: noreply@tschatscher.eu
+      # EMAIL_FROM_NAME: Allianz Jaeger
+      # === Microsoft ===
+      # AUTH_MICROSOFT_ENABLED: "false"
+      # MESSAGING_PROVIDER_MICROSOFT_ENABLED: "false"
+      # CALENDAR_PROVIDER_MICROSOFT_ENABLED: "false"
+      # AUTH_MICROSOFT_CLIENT_ID: deine-microsoft-client-id
+      # AUTH_MICROSOFT_CLIENT_SECRET: dein-microsoft-client-secret
+      # AUTH_MICROSOFT_CALLBACK_URL: https://twenty.tschatscher.eu/auth/microsoft/redirect
+      # AUTH_MICROSOFT_APIS_CALLBACK_URL: https://twenty.tschatscher.eu/auth/microsoft-apis/get-access-token
     depends_on:
       db:
         condition: service_healthy
@@ -76,7 +141,7 @@ services:
     environment:
       POSTGRES_DB: default
       POSTGRES_USER: twentyuser
-      POSTGRES_PASSWORD: ${TWENTY_DB_PASSWORD}
+      POSTGRES_PASSWORD: twentypass
       TZ: Europe/Berlin
     restart: unless-stopped
     networks:

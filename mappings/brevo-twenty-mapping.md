@@ -12,11 +12,11 @@
 | POSTLEITZAHL | `postleitzahl` | TEXT | Direkt |
 | KUNDENART | `kundenart` | SELECT | Mapping-Tabelle unten |
 | BRIEFANREDE | `briefanrede` | SELECT | Mapping-Tabelle unten |
-| EVBNUMMER | `evbNummer` | TEXT | Direkt |
-| EVBVORGANG | `evbVorgang` | SELECT | Mapping-Tabelle unten |
-| GEKUENDIGT | `gekuendigt` | SELECT | Mapping-Tabelle unten |
-| SCHADENSART | `schadensart` | SELECT | Mapping-Tabelle unten |
-| SERVICEART | `serviceart` | SELECT | Mapping-Tabelle unten |
+| EVBNUMMER | `versicherungEvbNummer` | TEXT | Direkt |
+| EVBVORGANG | `versicherungEvbVorgang` | SELECT | Mapping-Tabelle unten |
+| GEKUENDIGT | `versicherungGekuendigt` | SELECT | Mapping-Tabelle unten |
+| SCHADENSART | `versicherungSchadensart` | SELECT | Mapping-Tabelle unten |
+| SERVICEART | `versicherungServiceart` | SELECT | Mapping-Tabelle unten |
 | SONSTIGES | `sonstiges` | TEXT | Direkt |
 | LEAD | `lead` | MULTI_SELECT | Array -> komma-separiert (Twenty -> Brevo) |
 | JAHRESKONTAKT | `jahreskontakt` | DATE | DD-MM-YYYY → YYYY-MM-DD |
@@ -24,26 +24,26 @@
 | TERMINART | `terminArt` | TEXT | Direkt |
 | TERMINUHRZEIT | `terminUhrzeit` | TEXT | Direkt |
 | TERMINORT | `terminOrt` | TEXT | Direkt |
-| TIERRASSE | `tierrasse` | TEXT | Direkt |
-| TIERGESCHLECHT | `tiergeschlecht` | SELECT | Mapping-Tabelle unten |
-| KATZENHALTUNG | `katzenhaltung` | SELECT | Mapping-Tabelle unten |
-| TIERKRANKENKRANKHEITEN | `tierkrankenKrankheiten` | TEXT | Direkt |
-| TIERKRANKENKASTRIERT | `tierkrankenKastriert` | SELECT | Mapping-Tabelle unten |
-| TIERGEBURTSDATUM | `tiergeburtsdatum` | DATE | DD-MM-YYYY → YYYY-MM-DD |
-| ZAHNALTER | `zahnalter` | TEXT | Direkt |
-| NAMEKINDZAHN | `nameKindZahn` | TEXT | Direkt |
-| IMMOBILIENTYP | `immobilientyp` | TEXT | Direkt |
-| IMMOSCOUTANSCHRIFT | `immoscoutAnschrift` | TEXT | Direkt |
-| IMMOBILIENWERT | `immobilienwert` | TEXT | Direkt |
-| IMMOSCOUTID | `immoscoutId` | TEXT | Direkt |
-| WOHNFLAECHE | `wohnflaeche` | TEXT | Direkt |
-| GRUNDSTUECKFLAECHE | `grundstueckflaeche` | TEXT | Direkt |
-| ZIMMERANZAHL | `zimmeranzahl` | TEXT | Direkt |
-| BAUJAHR | `baujahr` | TEXT | Direkt |
+| TIERRASSE | `tierRasse` | TEXT | Direkt |
+| TIERGESCHLECHT | `tierGeschlecht` | SELECT | Mapping-Tabelle unten |
+| KATZENHALTUNG | `tierKatzenhaltung` | SELECT | Mapping-Tabelle unten |
+| TIERKRANKENKRANKHEITEN | `tierKrankheiten` | TEXT | Direkt |
+| TIERKRANKENKASTRIERT | `tierKastriert` | SELECT | Mapping-Tabelle unten |
+| TIERGEBURTSDATUM | `tierGeburtsdatum` | DATE | DD-MM-YYYY → YYYY-MM-DD |
+| ZAHNALTER | `zahnAlter` | TEXT | Direkt |
+| NAMEKINDZAHN | `zahnNameKind` | TEXT | Direkt |
+| IMMOBILIENTYP | `immobilienTyp` | TEXT | Direkt |
+| IMMOSCOUTANSCHRIFT | `immobilienImmoScoutAnschrift` | TEXT | Direkt |
+| IMMOBILIENWERT | `immobilienWert` | TEXT | Direkt |
+| IMMOSCOUTID | `immobilienImmoScoutId` | TEXT | Direkt |
+| WOHNFLAECHE | `immobilienWohnflaeche` | TEXT | Direkt |
+| GRUNDSTUECKFLAECHE | `immobilienGrundstueckflaeche` | TEXT | Direkt |
+| ZIMMERANZAHL | `immobilienZimmeranzahl` | TEXT | Direkt |
+| BAUJAHR | `immobilienBaujahr` | TEXT | Direkt |
 | ORT | `ort` | TEXT | Direkt |
 | STRASSE | `strasse` | TEXT | Direkt |
-| ZAHNFEHLEN | `zahnfehlen` | TEXT | Direkt |
-| ZAHNLINK | `zahnlink` | LINK | URL aus LINK-Feld extrahieren |
+| ZAHNFEHLEN | `zahnFehlen` | TEXT | Direkt |
+| ZAHNLINK | `zahnLink` | LINK | URL aus LINK-Feld extrahieren |
 | WERBUNGFACEBOOK | `werbungFacebook` | TEXT | Direkt |
 | UNLOGAUFTRAG | → UnLOG Auftraege Object | - | Separates Object |
 | UNLOGPREIS | → UnLOG Aufträge Object | CURRENCY | * 1.000.000 (amountMicros) |
@@ -143,20 +143,20 @@
 | kundenart = `INTERESSENT_FIRMA` | Liste 21 |
 | kundenart = `EIGENTUEMERANFRAGE` | Liste 19 |
 | kundenart = `IMMOBILIENANFRAGE` | Liste 18 |
-| evbVorgang = `AUSGEGEBEN` | Liste 46 |
-| evbVorgang = `ERLEDIGT` | Liste 47 |
-| gekuendigt = `KFZ` | Liste 28 |
-| gekuendigt = `PRIVAT_SACH` | Liste 27 |
-| schadensart = `AUTOSCHADEN` | Liste 29 |
-| schadensart = `AUTOSCHADEN_WERKSTATT` | Liste 30 |
-| schadensart = `GLASSCHADEN` | Liste 31 |
-| schadensart = `GEBAEUDESCHADEN` | Liste 32 |
-| schadensart = `HAFTPFLICHTSCHADEN` | Liste 33 |
-| serviceart = `ANTRAG` | Liste 38 |
-| serviceart = `RECHNUNG_ZAHN` | Liste 34 |
-| serviceart = `RECHNUNG_TIERKRANKEN` | Liste 36 |
-| serviceart = `RECHNUNG_VOLLKRANKEN` | Liste 35 |
-| serviceart = `MAHNUNG` | Liste 37 |
+| versicherungEvbVorgang = `AUSGEGEBEN` | Liste 46 |
+| versicherungEvbVorgang = `ERLEDIGT` | Liste 47 |
+| versicherungGekuendigt = `KFZ` | Liste 28 |
+| versicherungGekuendigt = `PRIVAT_SACH` | Liste 27 |
+| versicherungSchadensart = `AUTOSCHADEN` | Liste 29 |
+| versicherungSchadensart = `AUTOSCHADEN_WERKSTATT` | Liste 30 |
+| versicherungSchadensart = `GLASSCHADEN` | Liste 31 |
+| versicherungSchadensart = `GEBAEUDESCHADEN` | Liste 32 |
+| versicherungSchadensart = `HAFTPFLICHTSCHADEN` | Liste 33 |
+| versicherungServiceart = `ANTRAG` | Liste 38 |
+| versicherungServiceart = `RECHNUNG_ZAHN` | Liste 34 |
+| versicherungServiceart = `RECHNUNG_TIERKRANKEN` | Liste 36 |
+| versicherungServiceart = `RECHNUNG_VOLLKRANKEN` | Liste 35 |
+| versicherungServiceart = `MAHNUNG` | Liste 37 |
 
 ## Telefonnummer-Normalisierung
 

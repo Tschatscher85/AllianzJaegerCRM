@@ -30,11 +30,11 @@
 
 | # | Feld | API Name | Typ | Optionen |
 |---|------|----------|-----|----------|
-| 11 | EvB Nummer | `evbNummer` | TEXT | eVB-Nummer KFZ |
-| 12 | EvB Vorgang | `evbVorgang` | SELECT | `AUSGEGEBEN` (orange), `ERLEDIGT` (gruen) |
-| 13 | Gekuendigt | `gekuendigt` | SELECT | `KEINE` (gruen), `KFZ` (rot), `PRIVAT_SACH` (rot) |
-| 14 | Schadensart | `schadensart` | SELECT | `KEIN_SCHADEN`, `AUTOSCHADEN`, `AUTOSCHADEN_WERKSTATT`, `GLASSCHADEN`, `GEBAEUDESCHADEN`, `HAFTPFLICHTSCHADEN` |
-| 15 | Serviceart | `serviceart` | SELECT | `KEIN_SERVICE`, `ANTRAG`, `RECHNUNG_ZAHN`, `RECHNUNG_TIERKRANKEN`, `RECHNUNG_VOLLKRANKEN`, `MAHNUNG` |
+| 11 | Versicherung EvB Nummer | `versicherungEvbNummer` | TEXT | eVB-Nummer KFZ |
+| 12 | Versicherung EvB Vorgang | `versicherungEvbVorgang` | SELECT | `AUSGEGEBEN` (orange), `ERLEDIGT` (gruen) |
+| 13 | Versicherung Gekuendigt | `versicherungGekuendigt` | SELECT | `KEINE` (gruen), `KFZ` (rot), `PRIVAT_SACH` (rot) |
+| 14 | Versicherung Schadensart | `versicherungSchadensart` | SELECT | `KEIN_SCHADEN`, `AUTOSCHADEN`, `AUTOSCHADEN_WERKSTATT`, `GLASSCHADEN`, `GEBAEUDESCHADEN`, `HAFTPFLICHTSCHADEN` |
+| 15 | Versicherung Serviceart | `versicherungServiceart` | SELECT | `KEIN_SERVICE`, `ANTRAG`, `RECHNUNG_ZAHN`, `RECHNUNG_TIERKRANKEN`, `RECHNUNG_VOLLKRANKEN`, `MAHNUNG` |
 
 ## Termin-Felder
 
@@ -49,35 +49,35 @@
 
 | # | Feld | API Name | Typ | Optionen |
 |---|------|----------|-----|----------|
-| 20 | Tierrasse | `tierrasse` | TEXT | Rasse des Tieres |
-| 21 | Tiergeschlecht | `tiergeschlecht` | SELECT | `MAENNLICH` (blau), `WEIBLICH` (rot) |
-| 22 | Katzenhaltung | `katzenhaltung` | SELECT | `FREIGAENGER` (gruen), `WOHNUNG` (blau) |
-| 23 | Tierkranken Krankheiten | `tierkrankenKrankheiten` | TEXT | Vorerkrankungen |
-| 24 | Kastriert | `tierkrankenKastriert` | SELECT | `JA` (gruen), `NEIN` (rot) |
-| 25 | Tier Geburtsdatum | `tiergeburtsdatum` | DATE | Geburtsdatum Tier |
+| 20 | Tier Rasse | `tierRasse` | TEXT | Rasse des Tieres |
+| 21 | Tier Geschlecht | `tierGeschlecht` | SELECT | `MAENNLICH` (blau), `WEIBLICH` (rot) |
+| 22 | Tier Katzenhaltung | `tierKatzenhaltung` | SELECT | `FREIGAENGER` (gruen), `WOHNUNG` (blau) |
+| 23 | Tier Krankheiten | `tierKrankheiten` | TEXT | Vorerkrankungen |
+| 24 | Tier Kastriert | `tierKastriert` | SELECT | `JA` (gruen), `NEIN` (rot) |
+| 25 | Tier Geburtsdatum | `tierGeburtsdatum` | DATE | Geburtsdatum Tier |
 
 ## Zahnversicherung
 
 | # | Feld | API Name | Typ | Beschreibung |
 |---|------|----------|-----|-------------|
-| 26 | Zahnalter | `zahnalter` | TEXT | Alter fuer Zahnversicherung |
-| 27 | Name Kind (Zahn) | `nameKindZahn` | TEXT | Name des Kindes |
-| 28 | Zahnfehlen | `zahnfehlen` | TEXT | Fehlende Zaehne |
-| 29 | Zahnlink | `zahnlink` | LINK | Link zu Zahn-Dokumenten |
+| 26 | Zahn Alter | `zahnAlter` | TEXT | Alter fuer Zahnversicherung |
+| 27 | Zahn Name Kind | `zahnNameKind` | TEXT | Name des Kindes |
+| 28 | Zahn Fehlen | `zahnFehlen` | TEXT | Fehlende Zaehne |
+| 29 | Zahn Link | `zahnLink` | LINK | Link zu Zahn-Dokumenten |
 
 ## Immobilien
 
 | # | Feld | API Name | Typ | Beschreibung / Optionen |
 |---|------|----------|-----|------------------------|
-| 30 | Immobilien Typ | `immobilientyp` | TEXT | Art der Immobilie |
-| 31 | Immobilien ImmoScout Anschrift | `immoscoutAnschrift` | TEXT | Adresse aus ImmoScout |
-| 32 | Immobilien Wert | `immobilienwert` | TEXT | Geschaetzter Wert |
-| 33 | Immobilien ImmoScout ID | `immoscoutId` | TEXT | ImmoScout Objekt-ID |
-| 34 | Immobilien Kategorie | `immobilienkategorie` | SELECT | `VERKAUF` (orange), `VERMIETUNG` (tuerkis) |
-| 35 | Immobilien Wohnflaeche | `wohnflaeche` | TEXT | Wohnflaeche in qm |
-| 36 | Immobilien Grundstueckflaeche | `grundstueckflaeche` | TEXT | Grundstueckflaeche in qm |
-| 37 | Immobilien Zimmeranzahl | `zimmeranzahl` | TEXT | Anzahl der Zimmer |
-| 38 | Immobilien Baujahr | `baujahr` | TEXT | Baujahr der Immobilie |
+| 30 | Immobilien Typ | `immobilienTyp` | TEXT | Art der Immobilie |
+| 31 | Immobilien ImmoScout Anschrift | `immobilienImmoScoutAnschrift` | TEXT | Adresse aus ImmoScout |
+| 32 | Immobilien Wert | `immobilienWert` | TEXT | Geschaetzter Wert |
+| 33 | Immobilien ImmoScout ID | `immobilienImmoScoutId` | TEXT | ImmoScout Objekt-ID |
+| 34 | Immobilien Kategorie | `immobilienKategorie` | SELECT | `VERKAUF` (orange), `VERMIETUNG` (tuerkis) |
+| 35 | Immobilien Wohnflaeche | `immobilienWohnflaeche` | TEXT | Wohnflaeche in qm |
+| 36 | Immobilien Grundstueckflaeche | `immobilienGrundstueckflaeche` | TEXT | Grundstueckflaeche in qm |
+| 37 | Immobilien Zimmeranzahl | `immobilienZimmeranzahl` | TEXT | Anzahl der Zimmer |
+| 38 | Immobilien Baujahr | `immobilienBaujahr` | TEXT | Baujahr der Immobilie |
 
 ## Marketing
 
@@ -101,11 +101,11 @@
   "strasse": "681d24b0-a4ee-472f-8710-f53de3ed7b6a",
   "kundenart": "b6774654-1c2e-458b-b633-11c0b963685c",
   "briefanrede": "bedfc155-7d20-49ea-be87-099f5188a9f9",
-  "evbNummer": "24e11af8-1a1d-48af-96af-09dce5b065eb",
-  "evbVorgang": "5553a92e-1275-403c-adc3-6f8930f6ab89",
-  "gekuendigt": "e3e50bb3-a247-49e4-847e-bc82686bc491",
-  "schadensart": "694c284e-b37b-4fa7-b5f0-1c8ff0fcd129",
-  "serviceart": "028865fb-31ea-4297-8107-8276b0e54525",
+  "versicherungEvbNummer": "bddd113a-2321-488f-940b-151c7ee9f315",
+  "versicherungEvbVorgang": "085e9b50-e8a6-41af-954b-f0e8104110d8",
+  "versicherungGekuendigt": "767405ea-bd7f-4558-9bb9-eacea7210b56",
+  "versicherungSchadensart": "1705cd11-e635-48e5-84f5-91e658e57111",
+  "versicherungServiceart": "1db9823c-fff4-4fed-a6ea-ee45ca7519c6",
   "bereich": "40b3d685-8c7e-41ed-ac53-fb158b82da82",
   "sonstiges": "7d8fa883-6caa-4d3b-95c3-a9c530247838",
   "jahreskontakt": "8bb9f367-7e4d-486f-83d9-6c1bfde48925",
@@ -114,25 +114,25 @@
   "terminArt": "c6311192-68c7-477b-9ba8-2b88fcca1e1b",
   "terminUhrzeit": "490c31f6-bd24-4166-93fc-d9decbb492e6",
   "terminOrt": "a6971496-378f-4f35-b028-00456ca4b7b1",
-  "tierrasse": "8b0e1c7b-c97f-4bce-a8d8-a993072e9060",
-  "tiergeschlecht": "ac51d8fc-f806-446d-8002-04029bee7537",
-  "katzenhaltung": "53dcea76-7927-4ff1-8113-04403feff0f7",
-  "tierkrankenKrankheiten": "4603a847-da33-4fde-9f9a-2b4ad748adfa",
-  "tierkrankenKastriert": "01329217-ef8e-4f83-a8df-406b4ef818c6",
-  "tiergeburtsdatum": "45d42f8b-c83f-49cd-99cc-ec17cd63f561",
-  "zahnalter": "e1622dd5-df3c-4752-8c3e-5498c06e3276",
-  "nameKindZahn": "a0d73865-2a28-4b69-ada9-42b7dd14bec7",
-  "zahnfehlen": "de02afba-cd78-4efe-b9a1-7ca0ddb64a92",
-  "zahnlink": "35e875da-93e4-47ff-97a0-075665a21e35",
-  "immobilientyp": "89986619-ff2d-42ea-9e11-9726979a4f2c",
-  "immoscoutAnschrift": "1af02bd5-883e-43b9-8df1-16e32a4424d3",
-  "immobilienwert": "afe92e3f-bf91-417e-85e6-85451dd2d3a3",
-  "immoscoutId": "95ea79e2-4684-42a6-b095-f3a107269ff6",
-  "immobilienkategorie": "b86ca957-d830-44e2-8966-9a7f60fb1c8f",
-  "wohnflaeche": "5c18c684-91f6-4f38-b796-2947d7fd316a",
-  "grundstueckflaeche": "4df641d0-8de4-4790-a42a-113c13fb94a0",
-  "zimmeranzahl": "a57646db-9b3b-47ca-8fa8-9680e1e1387e",
-  "baujahr": "e13a95af-25f3-44f0-9d6c-ecbd6db2d0b9",
+  "tierRasse": "0bfb8cc2-3ed3-4afb-aa69-3727217988c2",
+  "tierGeschlecht": "40814e7b-97ca-4536-9aea-03568ff9a31d",
+  "tierKatzenhaltung": "e0cb6d7b-8701-4f48-a767-f07bdb7d224c",
+  "tierKrankheiten": "e3cba945-eb25-4eff-9db0-e415de05f148",
+  "tierKastriert": "e153993d-8933-4e9b-8b5d-2908d5e6980f",
+  "tierGeburtsdatum": "53b03711-bf5c-4e9e-af01-a45f38f93261",
+  "zahnAlter": "492c11e9-2fba-49f9-a434-97c7de8e7bf0",
+  "zahnNameKind": "f72f204a-6dc0-460e-bc0f-7d05970b8785",
+  "zahnFehlen": "02f861b3-a1bf-4d11-a66f-97ff02762d99",
+  "zahnLink": "0b6c6727-2992-4649-961c-2b7be2a3dbe4",
+  "immobilienTyp": "edc1985f-f90c-4992-9627-5cbb01f69074",
+  "immobilienImmoScoutAnschrift": "6a41d23b-b3cf-48bf-a47b-3f79af29c8d0",
+  "immobilienWert": "30b0a55a-b414-419b-9e65-7f3c7d68c90e",
+  "immobilienImmoScoutId": "8ffb532f-98b8-4cff-b564-267d73499e5c",
+  "immobilienKategorie": "6a04b90a-832c-4310-81bb-027153fa7883",
+  "immobilienWohnflaeche": "e4fcb9d9-b2f6-4d85-a652-28eb5a8c51ad",
+  "immobilienGrundstueckflaeche": "dcac9558-fd8e-43ac-a5a1-d2e8689131f0",
+  "immobilienZimmeranzahl": "9bcc6dd3-e801-4cb1-b443-1ec594b28dc2",
+  "immobilienBaujahr": "37cd66e3-9f85-4d93-858c-1bcf5c312925",
   "werbungFacebook": "4cdcf512-ceb5-498f-859b-0f41ef0fcedf"
 }
 ```
@@ -154,6 +154,8 @@ curl -X POST https://twenty.tschatscher.eu/rest/people \
     "postleitzahl": "76131",
     "ort": "Karlsruhe",
     "strasse": "Kaiserstr. 1",
-    "geburtsdatum": "1990-05-15"
+    "geburtsdatum": "1990-05-15",
+    "versicherungEvbNummer": "W123456789",
+    "versicherungEvbVorgang": "AUSGEGEBEN"
   }'
 ```
