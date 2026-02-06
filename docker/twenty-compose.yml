@@ -1,0 +1,104 @@
+version: "3.8"
+services:
+  server:
+    image: twentycrm/twenty:latest
+    container_name: twenty_server
+    user: "0:0"
+    volumes:
+      - "/mnt/user/Backups/Twenty:/app/packages/twenty-server/.local-storage:rw"
+    ports:
+      - 3353:3000
+    environment:
+      NODE_PORT: 3000
+      PG_DATABASE_URL: postgres://twentyuser:${TWENTY_DB_PASSWORD}@twenty-db:5432/default
+      SERVER_URL: https://twenty.tschatscher.eu
+      APP_SECRET: ${TWENTY_APP_SECRET}
+      REDIS_URL: redis://twenty-redis:6379
+      DISABLE_DB_MIGRATIONS: "false"
+      DISABLE_CRON_JOBS_REGISTRATION: "false"
+      IS_MULTIWORKSPACE_ENABLED: "false"
+      STORAGE_TYPE: local
+      TZ: Europe/Berlin
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "curl --fail http://localhost:3000/healthz || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 20
+      start_period: 30s
+    restart: unless-stopped
+    networks:
+      - twenty_default
+  worker:
+    image: twentycrm/twenty:latest
+    container_name: twenty_worker
+    user: "0:0"
+    volumes:
+      - "/mnt/user/Backups/Twenty:/app/packages/twenty-server/.local-storage:rw"
+    command: ["yarn", "worker:prod"]
+    environment:
+      PG_DATABASE_URL: postgres://twentyuser:${TWENTY_DB_PASSWORD}@twenty-db:5432/default
+      SERVER_URL: https://twenty.tschatscher.eu
+      APP_SECRET: ${TWENTY_APP_SECRET}
+      REDIS_URL: redis://twenty-redis:6379
+      DISABLE_DB_MIGRATIONS: "false"
+      DISABLE_CRON_JOBS_REGISTRATION: "false"
+      STORAGE_TYPE: local
+      TZ: Europe/Berlin
+    depends_on:
+      db:
+        condition: service_healthy
+      server:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    restart: unless-stopped
+    networks:
+      - twenty_default
+  db:
+    image: postgres:16
+    container_name: twenty_db
+    hostname: twenty-db
+    security_opt:
+      - no-new-privileges:true
+    healthcheck:
+      test: ["CMD", "pg_isready", "-q", "-d", "default", "-U", "twentyuser"]
+      timeout: 10s
+      interval: 10s
+      retries: 10
+      start_period: 15s
+    volumes:
+      - /mnt/dockerfestplatte/appdata/twenty/db:/var/lib/postgresql/data:rw
+    environment:
+      POSTGRES_DB: default
+      POSTGRES_USER: twentyuser
+      POSTGRES_PASSWORD: ${TWENTY_DB_PASSWORD}
+      TZ: Europe/Berlin
+    restart: unless-stopped
+    networks:
+      - twenty_default
+  redis:
+    image: redis:7-alpine
+    container_name: twenty_redis
+    hostname: twenty-redis
+    healthcheck:
+      test: ["CMD-SHELL", "redis-cli ping || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 5s
+    volumes:
+      - /mnt/dockerfestplatte/appdata/twenty/redis:/data:rw
+    environment:
+      TZ: Europe/Berlin
+    restart: unless-stopped
+    command: ["--maxmemory-policy", "noeviction"]
+    networks:
+      - twenty_default
+networks:
+  twenty_default:
+    driver: bridge

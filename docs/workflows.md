@@ -7,7 +7,9 @@
 | `L0nt3WOb5Ew6CsUe` | UnLOG - Brevo - Meistertask - Google | Brevo Webhook | ✅ Aktiv |
 | `cxgFhItwoQ56troU` | Twenty Webhook Parser | Twenty Webhook | ✅ Aktiv |
 | `Ti7k7a5jC2l1Yd2z` | Twenty API Proxy | n8n Webhook | ✅ Aktiv |
+| `hLmDJBA0uOn2xB9w` | Twenty Dokument-Sync | Twenty Webhook (attachment) | ✅ Aktiv |
 | *(geplant)* | Versicherung Formular → Twenty | Brevo Webhook | ⏳ Offen |
+| *(geplant)* | SuperChat → Twenty (TKV-Leads) | SuperChat Webhook | ⏳ Offen |
 | *(geplant)* | Twenty → Brevo Listen Sync | Twenty Webhook | ⏳ Offen |
 
 ## Workflow 1: UnLOG - Brevo → Twenty + Google + Chatwoot
@@ -89,6 +91,28 @@ POST /webhook/twenty-proxy
     "type": "TEXT"
   }
 }
+```
+
+## Workflow 4: Twenty Dokument-Sync
+
+**ID:** `hLmDJBA0uOn2xB9w`
+**Webhook:** `https://make.tschatscher.eu/webhook/twenty-attachment`
+
+Automatischer Dokument-Sync von Twenty CRM auf den NAS Kundenordner.
+
+Siehe [docs/dokument-sync.md](dokument-sync.md) fuer die komplette Dokumentation.
+
+### Flow
+
+```
+Twenty Webhook (attachment.created)
+  → Parse & Route (nur .created Events)
+  → Person oder Immobilie? (IF)
+    ├── Person → Get Person → Build Path → /data/beratung/Versicherungen/{Nachname} {Vorname}/
+    └── Immobilie → Get Immobilie → Build Path → /data/beratung/Immobilienmakler/Verkauf/{Adresse}/
+  → Read Source File (aus Twenty Storage)
+  → Write to NAS (in Kundenordner)
+  → Update Twenty (Dokumentenordner-Link setzen)
 ```
 
 ## Geplant: Versicherung Formular → Twenty

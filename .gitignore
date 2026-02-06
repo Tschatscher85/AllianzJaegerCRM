@@ -2,6 +2,7 @@
 .env
 *.key
 api-keys.txt
+docker/.env
 
 # OS
 .DS_Store

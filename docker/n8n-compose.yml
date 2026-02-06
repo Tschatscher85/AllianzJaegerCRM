@@ -1,0 +1,111 @@
+version: "3.8"
+networks:
+  app-network:
+    external: true
+    name: app-network
+services:
+  db:
+    image: postgres:17
+    container_name: n8n-DB
+    hostname: n8n-db
+    networks:
+      - app-network
+    security_opt:
+      - no-new-privileges:true
+    healthcheck:
+      test: ["CMD", "pg_isready", "-q", "-d", "n8n", "-U", "n8nuser"]
+      timeout: 45s
+      interval: 10s
+      retries: 10
+    volumes:
+      - /mnt/dockerfestplatte/appdata/n8n/db:/var/lib/postgresql/data:rw
+    environment:
+      TZ: Europe/Berlin
+      POSTGRES_DB: n8n
+      POSTGRES_USER: n8nuser
+      POSTGRES_PASSWORD: ${N8N_DB_PASSWORD}
+    restart: unless-stopped
+  n8n:
+    image: n8nio/n8n:latest
+    container_name: n8n
+    hostname: n8n
+    user: "0:0"
+    networks:
+      - app-network
+    security_opt:
+      - no-new-privileges:true
+    healthcheck:
+      test: ["CMD-SHELL", "nc -z 127.0.0.1 5678 || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 90s
+    ports:
+      - "5678:5678"
+    volumes:
+      - /mnt/dockerfestplatte/appdata/n8n/data:/root/.n8n:rw
+      - /mnt/dockerfestplatte/appdata/n8n/files:/files:rw
+      - /mnt/user/Backups/Twenty:/data/twenty-storage:ro
+      - "/mnt/user/Agentur Jaeger/Beratung:/data/beratung:rw"
+    environment:
+      N8N_HOST: make.tschatscher.eu
+      WEBHOOK_URL: https://make.tschatscher.eu
+      N8N_EDITOR_BASE_URL: https://make.tschatscher.eu
+      GENERIC_TIMEZONE: Europe/Berlin
+      TZ: Europe/Berlin
+      N8N_PORT: 5678
+      N8N_PROTOCOL: https
+      NODE_ENV: production
+      N8N_ENCRYPTION_KEY: ${N8N_ENCRYPTION_KEY}
+      N8N_RUNNERS_ENABLED: true
+      N8N_ENFORCE_SETTINGS_FILE_PERMISSIONS: true
+      N8N_SECURE_COOKIE: true
+      N8N_COMMUNITY_PACKAGES_ENABLED: true
+      N8N_AI_AGENTS_ENABLED: true
+      N8N_EXPERIMENTAL_FEATURES_ENABLED: true
+      N8N_AI_OPENAI_TOOLS_AGENT_ENABLED: true
+      N8N_FEATURE_FLAG_PREVIEW_AI: true
+      N8N_RESTRICT_FILE_ACCESS_TO: "/data/twenty-storage,/data/beratung,/files"
+      DB_TYPE: postgresdb
+      DB_POSTGRESDB_DATABASE: n8n
+      DB_POSTGRESDB_HOST: n8n-db
+      DB_POSTGRESDB_PORT: 5432
+      DB_POSTGRESDB_USER: n8nuser
+      DB_POSTGRESDB_PASSWORD: ${N8N_DB_PASSWORD}
+    depends_on:
+      db:
+        condition: service_healthy
+    restart: unless-stopped
+  qdrant:
+    image: qdrant/qdrant:latest
+    container_name: qdrant
+    hostname: qdrant
+    networks:
+      - app-network
+    restart: unless-stopped
+    ports:
+      - "6333:6333"
+    volumes:
+      - /mnt/dockerfestplatte/appdata/qdrant/storage:/qdrant/storage
+    environment:
+      TZ: Europe/Berlin
+  business-db:
+    image: postgres:16
+    container_name: business-db
+    hostname: business-db
+    networks:
+      - app-network
+    restart: unless-stopped
+    ports:
+      - "5455:5432"
+    environment:
+      POSTGRES_DB: business_data
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: ${BUSINESS_DB_PASSWORD}
+    volumes:
+      - /mnt/dockerfestplatte/appdata/business_db:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U admin -d business_data"]
+      interval: 10s
+      timeout: 5s
+      retries: 5

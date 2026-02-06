@@ -42,6 +42,19 @@ Siehe [mappings/brevo-twenty-mapping.md](mappings/brevo-twenty-mapping.md) für 
 
 Siehe [docs/workflows.md](docs/workflows.md) für alle n8n Workflow-Beschreibungen.
 
+## 📄 Dokument-Sync (Twenty → NAS)
+
+Automatischer Upload-Sync: Dokumente in Twenty hochladen → automatisch in den richtigen Kundenordner auf dem NAS kopieren.
+
+Siehe [docs/dokument-sync.md](docs/dokument-sync.md) für die komplette Dokumentation.
+
+## 🐳 Docker Compose
+
+| Service | Compose | Beschreibung |
+|---------|---------|-------------|
+| n8n + Postgres + Qdrant | [docker/n8n-compose.yml](docker/n8n-compose.yml) | Workflow Automation |
+| Twenty CRM | [docker/twenty-compose.yml](docker/twenty-compose.yml) | Self-hosted CRM |
+
 ## 🛠️ Tech Stack
 
 | Service | URL | Beschreibung |
@@ -53,10 +66,13 @@ Siehe [docs/workflows.md](docs/workflows.md) für alle n8n Workflow-Beschreibung
 | Google Sheets | - | Buchhaltung/Tracking |
 | Google Contacts | - | Kontaktsync |
 
-Alles self-hosted auf **Ugreen NAS** via Docker + Portainer + Nginx Proxy Manager.
+Alles self-hosted auf **Unraid NAS** via Docker + Nginx Proxy Manager.
 
 ## 📝 Changelog
 
+- **2026-02-06**: Dokument-Sync Workflow dokumentiert + Docker Composes hinzugefügt
+- **2026-02-05**: Twenty Dokument-Sync Workflow (n8n: `hLmDJBA0uOn2xB9w`)
+- **2026-02-05**: Docker Volume Mounts für Twenty Storage + NAS Beratungsordner
 - **2026-02-04**: People Custom Fields erstellt (29 Felder)
 - **2026-02-04**: UnLOG Aufträge Pipeline + Brevo Webhook Integration
 - **2026-02-04**: Twenty Custom Objects erstellt (5 Pipelines)
